@@ -3,6 +3,7 @@ package com.baeldung.avro.util.serealization;
 import com.baeldung.avro.util.model.AvroHttpRequest;
 import org.apache.avro.io.*;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +14,8 @@ public class AvroSerealizer {
 
     private static final Logger logger = LoggerFactory.getLogger(AvroSerealizer.class);
 
-    public byte[] serealizeAvroHttpRequestJSON(AvroHttpRequest request) {
-        DatumWriter<AvroHttpRequest> writer = new SpecificDatumWriter<>(AvroHttpRequest.class);
+    public byte[] serealizeAvroHttpRequestJSON(SpecificRecord request) {
+        DatumWriter<SpecificRecord> writer = new SpecificDatumWriter<SpecificRecord>((Class<SpecificRecord>) request.getClass());
         byte[] data = new byte[0];
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         Encoder jsonEncoder = null;
@@ -30,8 +31,8 @@ public class AvroSerealizer {
         return data;
     }
 
-    public byte[] serealizeAvroHttpRequestBinary(AvroHttpRequest request) {
-        DatumWriter<AvroHttpRequest> writer = new SpecificDatumWriter<>(AvroHttpRequest.class);
+    public byte[] serealizeAvroHttpRequestBinary(SpecificRecord request) {
+        DatumWriter<SpecificRecord> writer = new SpecificDatumWriter<SpecificRecord>((Class<SpecificRecord>) request.getClass());
         byte[] data = new byte[0];
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         Encoder jsonEncoder = EncoderFactory.get()

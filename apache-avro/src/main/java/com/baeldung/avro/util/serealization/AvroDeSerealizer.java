@@ -5,17 +5,18 @@ import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
+import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class AvroDeSerealizer {
+public class AvroDeSerealizer<T> {
 
     private static Logger logger = LoggerFactory.getLogger(AvroDeSerealizer.class);
 
-    public AvroHttpRequest deSerealizeAvroHttpRequestJSON(byte[] data) {
-        DatumReader<AvroHttpRequest> reader = new SpecificDatumReader<>(AvroHttpRequest.class);
+    public SpecificRecord deSerealizeAvroHttpRequestJSON(byte[] data, T reference) {
+        DatumReader<SpecificRecord> reader = new SpecificDatumReader<SpecificRecord>((Class<SpecificRecord>) reference);
         Decoder decoder = null;
         try {
             decoder = DecoderFactory.get()
@@ -27,8 +28,8 @@ public class AvroDeSerealizer {
         return null;
     }
 
-    public AvroHttpRequest deSerealizeAvroHttpRequestBinary(byte[] data) {
-        DatumReader<AvroHttpRequest> employeeReader = new SpecificDatumReader<>(AvroHttpRequest.class);
+    public SpecificRecord deSerealizeAvroHttpRequestBinary(byte[] data, T reference) {
+        DatumReader<SpecificRecord> employeeReader = new SpecificDatumReader<SpecificRecord>((Class<SpecificRecord>) reference);
         Decoder decoder = DecoderFactory.get()
             .binaryDecoder(data, null);
         try {
